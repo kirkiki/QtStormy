@@ -9,6 +9,7 @@
 #include <QMainWindow>
 #include <QProgressBar>
 #include <QTimer>
+#include <QIntValidator>
 
 #include "coeur.h"
 

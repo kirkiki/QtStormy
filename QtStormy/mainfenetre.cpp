@@ -7,18 +7,21 @@ mainfenetre::mainfenetre()
     core2=new QProgressBar();
     core3=new QProgressBar();
     core4=new QProgressBar();
-    core1->setValue(30);
+    QLineEdit *ipadd = new QLineEdit;
+    ipadd->setInputMask("000.000.000.000;_");
+    ipadd->setMaximumWidth(100);
+
 
     QTimer *timer=new QTimer(this);
     connect(timer, SIGNAL(timeout()),this,SLOT(onTimeOut()));
     timer->start(1000);
 
     grille=new QGridLayout;
-
-    grille->addWidget(core1,0,0);
-    grille->addWidget(core2,1,0);
-    grille->addWidget(core3,2,0);
-    grille->addWidget(core4,3,0);
+    grille->addWidget(ipadd,0,0);
+    grille->addWidget(core1,0,5);
+    grille->addWidget(core2,1,5);
+    grille->addWidget(core3,2,5);
+    grille->addWidget(core4,3,5);
 
     qw->setLayout(grille);
     qw->show();
