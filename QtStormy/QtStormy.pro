@@ -4,6 +4,7 @@ SOURCES += \
     mainfenetre.cpp
 
 QT+= widgets
+QT+=network
 
 HEADERS += \
     window.h \

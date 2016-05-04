@@ -1,5 +1,6 @@
 #ifndef MAINFENETRE_H
 #define MAINFENETRE_H
+#include <iostream>
 #include <QApplication>
 #include <QWidget>
 #include <QPushButton>
@@ -11,6 +12,11 @@
 #include <QTimer>
 #include <QTabWidget>
 #include <QHBoxLayout>
+#include <QUdpSocket>
+#include <QByteArray>
+#include <QHostAddress>
+#include <string>
+#include <QDataStream>
 
 
 #include "coeur.h"
@@ -25,6 +31,7 @@ class mainfenetre: public QMainWindow
 public slots:
     void onTimeOut();
     void onConnexion();
+    void deb();
 
 private:
     QWidget *fenetre;
@@ -43,6 +50,11 @@ private:
     QHBoxLayout *box;
     QLineEdit *ipadd;
     QPushButton *seConnecter;
+
+    QUdpSocket *soc;
+    QHostAddress *add;
+    QByteArray *datagram;
+    std::string *s;
 
 
 

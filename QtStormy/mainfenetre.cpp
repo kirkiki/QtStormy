@@ -1,5 +1,6 @@
 #include "mainfenetre.h"
 
+#include <typeinfo>
 mainfenetre::mainfenetre()
 {
     fenetre = new QWidget();
@@ -17,14 +18,18 @@ mainfenetre::mainfenetre()
     core3 = new QProgressBar();
     core4 = new QProgressBar();
 
+    soc=new QUdpSocket(this);
+    datagram=new QByteArray;
+
+    //connect(soc,SIGNAL(readyRead()),this,SLOT(deb()));
+
     //page 1
     box=new QHBoxLayout;
     ipadd = new QLineEdit();
     seConnecter= new QPushButton("se connecter", this);
+    connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
     ipadd->setInputMask("000.000.000.000;_");
     ipadd->setMaximumWidth(100);
-    connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
-
 
     box->addWidget(ipadd);
     box->addWidget(seConnecter);
@@ -61,5 +66,13 @@ void mainfenetre::onTimeOut(){
 }
 
 void mainfenetre::onConnexion(){
-    QMessageBox::information(this, "Titre de la fenêtre", "<strong>A implementer<\strong>");
+    add=new QHostAddress(ipadd->text());
+    qDebug()<<*add;
+    QByteArray datagram;
+    QDataStream out(&datagram, QIODevice::WriteOnly);
+    out<< "hello alexis";
+    soc->writeDatagram(datagram, *add, 8000);
+}
+void mainfenetre::deb(){
+    qDebug()<<"ok";
 }
