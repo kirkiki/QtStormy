@@ -31,7 +31,7 @@ class mainfenetre: public QMainWindow
 public slots:
     void onTimeOut();
     void onConnexion();
-    void deb();
+    void receive();
 
 private:
     QWidget *fenetre;
@@ -51,10 +51,17 @@ private:
     QLineEdit *ipadd;
     QPushButton *seConnecter;
 
-    QUdpSocket *soc;
+    QUdpSocket *sendSocket;
+    QUdpSocket *receiveSocket;
     QHostAddress *add;
     QByteArray *datagram;
     std::string *s;
+
+    std::uint32_t prctCoeur1;
+    std::uint32_t prctCoeur2;
+    std::uint32_t prctCoeur3;
+    std::uint32_t prctCoeur4;
+
 
 
 

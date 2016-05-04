@@ -18,18 +18,21 @@ mainfenetre::mainfenetre()
     core3 = new QProgressBar();
     core4 = new QProgressBar();
 
-    soc=new QUdpSocket(this);
-    datagram=new QByteArray;
-
-    //connect(soc,SIGNAL(readyRead()),this,SLOT(deb()));
 
     //page 1
     box=new QHBoxLayout;
     ipadd = new QLineEdit();
     seConnecter= new QPushButton("se connecter", this);
-    connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
+    sendSocket=new QUdpSocket(this);
+    receiveSocket = new QUdpSocket(this);
+    datagram=new QByteArray;
     ipadd->setInputMask("000.000.000.000;_");
     ipadd->setMaximumWidth(100);
+
+    receiveSocket->bind(8000);
+    connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
+    connect(receiveSocket, SIGNAL(readyRead()), this, SLOT(receive()));
+
 
     box->addWidget(ipadd);
     box->addWidget(seConnecter);
@@ -55,24 +58,33 @@ mainfenetre::mainfenetre()
 
 }
 void mainfenetre::onTimeOut(){
-    int value1=rand()%100+1;
-    int value2=rand()%100+1;
-    int value3=rand()%100+1;
-    int value4=rand()%100+1;
-    core1->setValue(value1);
-    core2->setValue(value2);
-    core3->setValue(value3);
-    core4->setValue(value4);
+    core1->setValue(prctCoeur1);
+    core2->setValue(prctCoeur2);
+    core3->setValue(prctCoeur3);
+    core4->setValue(prctCoeur4);
 }
 
 void mainfenetre::onConnexion(){
-    add=new QHostAddress(ipadd->text());
-    qDebug()<<*add;
+    //add=new QHostAddress(ipadd->text());
+    add=new QHostAddress(QHostAddress::LocalHost); // a enlever, pour le test
     QByteArray datagram;
     QDataStream out(&datagram, QIODevice::WriteOnly);
     out<< "hello alexis";
-    soc->writeDatagram(datagram, *add, 8000);
+    sendSocket->writeDatagram(datagram, *add, 8000);
 }
-void mainfenetre::deb(){
-    qDebug()<<"ok";
+
+void mainfenetre::receive(){
+    QByteArray datagram;
+    do {
+           datagram.resize(receiveSocket->pendingDatagramSize());
+           receiveSocket->readDatagram(datagram.data(), datagram.size());
+       } while (receiveSocket->hasPendingDatagrams());
+
+    QDataStream in(&datagram, QIODevice::ReadOnly);
+    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4;
+    //qDebug()<<prctCoeur1;
+    /*qDebug()<<prctCoeur2;
+    qDebug()<<prctCoeur3;
+    qDebug()<<prctCoeur4;*/
+
 }
