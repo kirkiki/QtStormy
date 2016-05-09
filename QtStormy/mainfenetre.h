@@ -17,10 +17,9 @@
 #include <QHostAddress>
 #include <string>
 #include <QDataStream>
+#include <QtCharts>
 
-
-#include "coeur.h"
-
+using namespace QtCharts;
 class mainfenetre: public QMainWindow
 {
     Q_OBJECT
@@ -50,6 +49,10 @@ private:
     QHBoxLayout *box;
     QLineEdit *ipadd;
     QPushButton *seConnecter;
+    QChart *chart;
+    QLineSeries *series;
+
+
 
     QUdpSocket *sendSocket;
     QUdpSocket *receiveSocket;
@@ -61,6 +64,7 @@ private:
     std::uint32_t prctCoeur2;
     std::uint32_t prctCoeur3;
     std::uint32_t prctCoeur4;
+    int values [10];
 
 
 

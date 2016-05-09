@@ -1,12 +1,9 @@
 SOURCES += \
     main.cpp \
-    coeur.cpp \
     mainfenetre.cpp
 
-QT+= widgets
-QT+=network
+QT+= widgets network charts
 
 HEADERS += \
     window.h \
-    coeur.h \
     mainfenetre.h
