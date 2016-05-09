@@ -26,6 +26,9 @@ class mainfenetre: public QMainWindow
 
     public:
     mainfenetre();
+    void miseEnPlace();
+    void page1Init();
+    void page2Init();
 
 public slots:
     void onTimeOut();
@@ -51,7 +54,13 @@ private:
     QPushButton *seConnecter;
     QChart *chart;
     QLineSeries *series;
-
+    QLineSeries *series2;
+    QLineSeries *series3;
+    QLineSeries *series4;
+    QChartView *view;
+    QTimer *timer;
+    QCategoryAxis *axisX;
+    QCategoryAxis *axisY;
 
 
     QUdpSocket *sendSocket;
@@ -65,6 +74,9 @@ private:
     std::uint32_t prctCoeur3;
     std::uint32_t prctCoeur4;
     int values [10];
+    int values2 [10];
+    int values3 [10];
+    int values4 [10];
 
 
 
