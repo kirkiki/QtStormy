@@ -12,6 +12,7 @@ mainfenetre::mainfenetre()
     connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
     connect(receiveSocket, SIGNAL(readyRead()), this, SLOT(receive()));
     connect(timer, SIGNAL(timeout()),this,SLOT(onTimeOut()));
+    //temperature->setStyleSheet("selection-background-color: black;");
 
     fenetre->show();
 }
@@ -49,6 +50,7 @@ void mainfenetre::miseEnPlace(){
     timer=new QTimer(this);
     axisX= new QCategoryAxis;
     axisY = new QCategoryAxis;
+    temperature = new QProgressBar;
 
     ram=new QLineSeries;
     chartRam = new QChart;
@@ -85,7 +87,7 @@ void mainfenetre::page2Init(){
     axisY->setRange(0,100);
     axisY->setGridLineVisible(true);
     axisX->setGridLineVisible(true);
-
+    temperature->setOrientation(Qt::Vertical);
     timer->start(100);
 
     //core1
@@ -148,13 +150,30 @@ void mainfenetre::page2Init(){
     series->attachAxis(axisX);
     series->attachAxis(axisY);
 
+
+
+
+
+
     view->setRenderHint(QPainter::Antialiasing);
+    core1->setTextVisible(true);
+    core2->setTextVisible(true);
+    core3->setTextVisible(true);
+    core4->setTextVisible(true);
+
+
+
+    core1->setAlignment(Qt::AlignCenter);
+    core2->setAlignment(Qt::AlignCenter);
+    core3->setAlignment(Qt::AlignCenter);
+    core4->setAlignment(Qt::AlignCenter);
 
     grille->addWidget(core1,0,5);
     grille->addWidget(core2,1,5);
     grille->addWidget(core3,2,5);
     grille->addWidget(core4,3,5);
     grille->addWidget(view,4,5);
+    grille->addWidget(temperature,4,6);
     page2->setLayout(grille);
 }
 
@@ -196,6 +215,33 @@ void mainfenetre::onTimeOut(){
     core2->setValue(prctCoeur2);
     core3->setValue(prctCoeur3);
     core4->setValue(prctCoeur4);
+    temperature->setValue(temp);
+
+
+    core1->setFormat(QStringLiteral("Core1 : %1 %").arg(prctCoeur1));
+    core2->setFormat(QStringLiteral("Core2 : %1 %").arg(prctCoeur2));
+    core3->setFormat(QStringLiteral("Core3 : %1 %").arg(prctCoeur3));
+    core4->setFormat(QStringLiteral("Core4 : %1 %").arg(prctCoeur4));
+
+    colorCore(core1,prctCoeur1);
+    colorCore(core2,prctCoeur2);
+    colorCore(core3,prctCoeur3);
+    colorCore(core4,prctCoeur4);
+
+
+    QString style_sheet ;
+    style_sheet +=  QString("QProgressBar {"
+                                "%0"
+                                "border: 2px solid grey;"
+                                "border-radius: 5px;"
+                                "text-align: center;"
+                                "}").arg(color()) ;
+    style_sheet +=  "QProgressBar::chunk {"
+                                "background: transparent;"
+                                "width: 10px;"
+                                "margin: 0.5px;"
+                                "}" ;
+    temperature->setStyleSheet(style_sheet);
 
     for(int i=0;i<10;i++){
          series->replace(i,i*10,values[i]);
@@ -224,7 +270,8 @@ void mainfenetre::receive(){
 
     QDataStream in(&datagram, QIODevice::ReadOnly);
    // int firstValue;
-    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam;
+    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam>>temp;
+    //temp=100;
     for(int i=9;i>0;i--){
         values[i]=values[i-1];
         values2[i]=values2[i-1];
@@ -245,4 +292,40 @@ void mainfenetre::receive(){
     qDebug()<<prctCoeur3;
     qDebug()<<prctCoeur4;*/
 
+}
+
+QString mainfenetre::color(){
+    QString low = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: %0 white, stop: 0 white);").arg(1-(temp/100.0)) ;
+    QString middle = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.55 orange, stop: %0 white, stop: 0 white);").arg(1-(temp/100.0));
+    QString high = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.55 orange, stop: 0.25 red, stop: %0 white, stop:0 white);").arg(1-(temp/100.0));
+    QString full = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.55 orange, stop: 0.25 red stop:0 red);");
+    if(temp<33){
+        return low;
+    }
+    else if(temp<66){
+        return middle;
+    }
+    else if(temp==100) {
+        return full;
+    }
+    else {
+        return high;
+    }
+}
+
+void mainfenetre::colorCore(QProgressBar *bar,uint32_t prct){
+    QString updated_bg = QString("background: qlineargradient(x1: 0, y1: 0.5, x2: 1, y2: 0.5, stop: 0.0 black, stop: %0 white, stop: 1.0 white);").arg((prct/100.0)) ;
+                QString style_sheet ;
+                style_sheet +=  QString("QProgressBar {"
+                                "%0"
+                                "border: 2px solid grey;"
+                                "border-radius: 5px;"
+                                "text-align: center;"
+                                "}").arg(updated_bg) ;
+                style_sheet +=  "QProgressBar::chunk {"
+                                "background: transparent;"
+                                "width: 10px;"
+                                "margin: 0.5px;"
+                                "}" ;
+                bar->setStyleSheet(style_sheet) ;
 }

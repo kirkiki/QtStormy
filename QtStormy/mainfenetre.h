@@ -18,6 +18,7 @@
 #include <string>
 #include <QDataStream>
 #include <QtCharts>
+#include <QPalette>
 
 using namespace QtCharts;
 class mainfenetre: public QMainWindow
@@ -30,6 +31,8 @@ class mainfenetre: public QMainWindow
     void page1Init();
     void page2Init();
     void page3Init();
+    QString color();
+    void colorCore(QProgressBar *bar, uint32_t prct);
 
 public slots:
     void onTimeOut();
@@ -69,6 +72,7 @@ private:
     QChartView *viewRam;
     QCategoryAxis *ramGo;
     QCategoryAxis *time;
+    QProgressBar *temperature;
 
     QUdpSocket *sendSocket;
     QUdpSocket *receiveSocket;
@@ -80,6 +84,7 @@ private:
     std::uint32_t prctCoeur2;
     std::uint32_t prctCoeur3;
     std::uint32_t prctCoeur4;
+    std::uint32_t temp;
     int values [10];
     int values2 [10];
     int values3 [10];
@@ -89,11 +94,7 @@ private:
     int valuesRam [10];
 
 
-
-
-
-
 };
 
-#endif // MAINFENETRE_H
+    #endif // MAINFENETRE_H
 
