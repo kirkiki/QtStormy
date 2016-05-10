@@ -29,6 +29,7 @@ class mainfenetre: public QMainWindow
     void miseEnPlace();
     void page1Init();
     void page2Init();
+    void page3Init();
 
 public slots:
     void onTimeOut();
@@ -61,7 +62,13 @@ private:
     QTimer *timer;
     QCategoryAxis *axisX;
     QCategoryAxis *axisY;
+    QGridLayout *grid;
 
+    QLineSeries *ram;
+    QChart *chartRam;
+    QChartView *viewRam;
+    QCategoryAxis *ramGo;
+    QCategoryAxis *time;
 
     QUdpSocket *sendSocket;
     QUdpSocket *receiveSocket;
@@ -77,6 +84,9 @@ private:
     int values2 [10];
     int values3 [10];
     int values4 [10];
+    int nbrRam;
+    int prctRam;
+    int valuesRam [10];
 
 
 

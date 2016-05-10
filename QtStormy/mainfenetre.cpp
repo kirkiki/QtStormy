@@ -7,14 +7,13 @@ mainfenetre::mainfenetre()
     miseEnPlace();
     page1Init();
     page2Init();
+    page3Init();
 
     connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
     connect(receiveSocket, SIGNAL(readyRead()), this, SLOT(receive()));
     connect(timer, SIGNAL(timeout()),this,SLOT(onTimeOut()));
 
-
     fenetre->show();
-
 }
 void mainfenetre::miseEnPlace(){
     fenetre = new QWidget();
@@ -32,6 +31,7 @@ void mainfenetre::miseEnPlace(){
     sendSocket=new QUdpSocket(this);
     receiveSocket = new QUdpSocket(this);
     datagram=new QByteArray;
+    nbrRam=8; //a changer pour avoir le nbr de ram max
 
 
     grille=new QGridLayout();
@@ -50,11 +50,16 @@ void mainfenetre::miseEnPlace(){
     axisX= new QCategoryAxis;
     axisY = new QCategoryAxis;
 
+    ram=new QLineSeries;
+    chartRam = new QChart;
+    viewRam = new QChartView(chartRam);
+    ramGo = new QCategoryAxis;
+    time = new QCategoryAxis;
+    grid = new QGridLayout;
 
     onglets->addTab(page1, "connexion");
     onglets->addTab(page2,"cpu");
-
-
+    onglets->addTab(page3,"RAM");
 }
 
 void mainfenetre::page1Init(){
@@ -80,10 +85,6 @@ void mainfenetre::page2Init(){
     axisY->setRange(0,100);
     axisY->setGridLineVisible(true);
     axisX->setGridLineVisible(true);
-    for(int i=0;i<10;i++){
-        values[i]=0;
-        values2[i]=0;
-    }
 
     timer->start(100);
 
@@ -155,8 +156,39 @@ void mainfenetre::page2Init(){
     grille->addWidget(core4,3,5);
     grille->addWidget(view,4,5);
     page2->setLayout(grille);
+}
+
+void mainfenetre::page3Init(){
+    chartRam->addSeries(ram);
+    chartRam->addAxis(ramGo,Qt::AlignLeft);
+    chartRam->addAxis(time,Qt::AlignBottom);
+    ram->attachAxis(ramGo);
+    ram->attachAxis(time);
+
+    ramGo->append("low",2);
+    ramGo->append("normal",6);
+    ramGo->append("high",8);
+    chartRam->setTitle("RAM pourcentage");
+    ramGo->setGridLineVisible(true);
+
+    ram->append(0,0);
+    ram->append(10,1);
+    ram->append(20,1);
+    ram->append(30,1);
+    ram->append(40,1);
+    ram->append(50,1);
+    ram->append(60,1);
+    ram->append(70,1);
+    ram->append(80,1);
+    ram->append(90,1);
+    ramGo->setRange(0,nbrRam);
+    time->setRange(0,100);
 
 
+
+    view->setRenderHint(QPainter::Antialiasing);
+    grid->addWidget(viewRam,0,0);
+    page3->setLayout(grid);
 }
 
 void mainfenetre::onTimeOut(){
@@ -170,7 +202,7 @@ void mainfenetre::onTimeOut(){
          series2->replace(i,i*10,values2[i]);
          series3->replace(i,i*10,values3[i]);
          series4->replace(i,i*10,values4[i]);
-
+         ram->replace(i,i*10,valuesRam[i]);
     }
 }
 
@@ -192,18 +224,20 @@ void mainfenetre::receive(){
 
     QDataStream in(&datagram, QIODevice::ReadOnly);
    // int firstValue;
-    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4;
+    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam;
     for(int i=9;i>0;i--){
         values[i]=values[i-1];
         values2[i]=values2[i-1];
         values3[i]=values3[i-1];
         values4[i]=values4[i-1];
+        valuesRam[i]=valuesRam[i-1];
 
     }
     values[0]=prctCoeur1;
     values2[0]=prctCoeur2;
     values3[0]=prctCoeur3;
     values4[0]=prctCoeur4;
+    valuesRam[0]=prctRam;
 
 
     /*qDebug()<<prctCoeur1;
