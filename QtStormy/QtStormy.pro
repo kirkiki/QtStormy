@@ -17,10 +17,14 @@ SOURCES += main.cpp\
     Api/File.cpp \
     Api/Packet.cpp \
     ConnectionPage.cpp \
-    MainFenetre.cpp
+    MainFenetre.cpp \
+    Cpu.cpp \
+    Ram.cpp
 
 HEADERS  += \
     Api/File.hpp \
     Api/Packet.hpp \
     ConnectionPage.hpp \
-    MainFenetre.hpp
+    MainFenetre.hpp \
+    Cpu.hpp \
+    Ram.hpp

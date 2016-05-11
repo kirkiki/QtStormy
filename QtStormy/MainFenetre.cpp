@@ -1,6 +1,11 @@
 #include "MainFenetre.hpp"
+#include <iostream>
 #include <typeinfo>
+#include "Api/Packet.hpp"
+#include "Cpu.hpp"
+
 using namespace QtCharts;
+
 mainfenetre::mainfenetre()
 {
     miseEnPlace();
@@ -79,7 +84,9 @@ void mainfenetre::page1Init(){
     ipadd->setInputMask("000.000.000.000;_");
     ipadd->setMaximumWidth(150);
     receiveSocket->bind(8000);
-    timerIsAlive->start(1000);
+    box->addWidget(ipadd);
+    box->addWidget(seConnecter);
+
     slider->setRange(0.5,5);
     slider->setSingleStep(1);
 
@@ -272,7 +279,16 @@ void mainfenetre::onTimeOut(){
 
 void mainfenetre::onConnexion(){
     //add=new QHostAddress(ipadd->text()); //a rajouter pour le projet
-    //add=new QHostAddress(QHostAddress::LocalHost); // a enlever, pour le test
+    add=new QHostAddress(QHostAddress::LocalHost); // a enlever, pour le test
+    timerIsAlive->start(5000);
+
+    Packet packet;
+    std::string cmd = "hello";
+    std::string id = "Tonton JMFN";
+    packet << cmd << id;
+
+    char * data = (char*)packet.getData();
+    receiveSocket->writeDatagram(data, packet.getDataSize() ,*add, 8003);
 }
 
 void mainfenetre::receive(){
@@ -284,9 +300,14 @@ void mainfenetre::receive(){
 
     QDataStream in(&datagram, QIODevice::ReadOnly);
    // int firstValue;
-    char *ch;
-   in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam>>temp>>ch;
-   qDebug()<<ch;
+   char * ch;
+   char * ch2;
+
+   in >> ch;
+   in >> ch2;
+
+   Cpu lol(ch);
+
     //temp=40;
     for(int i=9;i>0;i--){
         values[i]=values[i-1];
@@ -303,7 +324,7 @@ void mainfenetre::receive(){
     valuesRam[0]=prctRam;
 
 
-    /*qDebug()<<prctCoeur1;
+    /*qDebug(LocalHost)<<prctCoeur1;
     qDebug()<<prctCoeur2;
     qDebug()<<prctCoeur3;
     qDebug()<<prctCoeur4;*/
@@ -347,11 +368,15 @@ void mainfenetre::colorCore(QProgressBar *bar,uint32_t prct){
 }
 
 void mainfenetre::isAlive(){
-    add=new QHostAddress("10.75.18.77");
+    add=new QHostAddress(QHostAddress::LocalHost);
     QByteArray datagram;
-    QDataStream out(&datagram, QIODevice::WriteOnly);
-    out<< "alive";
-    sendSocket->writeDatagram(datagram, *add, 8003);
+    Packet packet;
+    std::string cmd = "alive";
+    std::string id = "Tonton JMFN";
+    packet << cmd << id;
+
+    char * data = (char*)packet.getData();
+    receiveSocket->writeDatagram(data, 17 ,*add, 8003);
 }
 
 void mainfenetre::sliderChange(int *value){

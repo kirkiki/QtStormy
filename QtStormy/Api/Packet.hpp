@@ -38,10 +38,11 @@ public:
     Packet &operator >>(float & data);
     Packet &operator >>(double & data);
 
+    const void *getData() const;
+
 private:
 
     bool checkSize(std::size_t size);
-    const void *getData() const;
     void append(const void * data, std::size_t sizeInByte);
 
     std::size_t readPos;
