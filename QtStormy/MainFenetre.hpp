@@ -19,6 +19,7 @@
 #include <QDataStream>
 #include <QtCharts>
 #include <QPalette>
+#include <QSlider>
 
 using namespace QtCharts;
 class mainfenetre: public QMainWindow
@@ -39,6 +40,8 @@ public slots:
     void onConnexion();
     void receive();
     void isAlive();
+    void sliderChange(int *value);
+
 
 private:
     QWidget *fenetre;
@@ -54,7 +57,7 @@ private:
     QProgressBar *core3;
     QProgressBar *core4;
 
-    QHBoxLayout *box;
+    QGridLayout *box;
     QLineEdit *ipadd;
     QPushButton *seConnecter;
     QChart *chart;
@@ -67,6 +70,15 @@ private:
     QCategoryAxis *axisX;
     QCategoryAxis *axisY;
     QGridLayout *grid;
+
+    QSlider *slider;
+    QLabel *tick1;
+    QLabel *tick2;
+    QLabel *tick3;
+    QLabel *tick4;
+    QLabel *tick5;
+    QLabel *second;
+
 
     QLineSeries *ram;
     QChart *chartRam;

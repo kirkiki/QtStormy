@@ -12,6 +12,7 @@ mainfenetre::mainfenetre()
     connect(receiveSocket, SIGNAL(readyRead()), this, SLOT(receive()));
     connect(timer, SIGNAL(timeout()),this,SLOT(onTimeOut()));
     connect(timerIsAlive,SIGNAL(timeout()),this, SLOT(isAlive()));
+    connect(slider,SIGNAL(valueChanged(int)),this,SLOT(sliderChange(int)));
     //temperature->setStyleSheet("selection-background-color: black;");
 
     fenetre->show();
@@ -26,7 +27,7 @@ void mainfenetre::miseEnPlace(){
     page2 = new QWidget;
     page3 = new QWidget;
 
-    box=new QHBoxLayout;
+    box=new QGridLayout;
     ipadd = new QLineEdit();
     seConnecter= new QPushButton("se connecter", this);
     sendSocket=new QUdpSocket(this);
@@ -34,6 +35,13 @@ void mainfenetre::miseEnPlace(){
     datagram=new QByteArray;
     nbrRam=8; //a changer pour avoir le nbr de ram max
     timerIsAlive=new QTimer(this);
+    slider = new QSlider(Qt::Horizontal);
+    tick1= new QLabel("1",this);
+    tick2= new QLabel("2",this);
+    tick3= new QLabel("3",this);
+    tick4= new QLabel("4",this);
+    tick5= new QLabel("5",this);
+    second=new QLabel("temps de rafraichissement (en seconde)",this);
 
     grille=new QGridLayout();
     core1 = new QProgressBar();
@@ -68,11 +76,22 @@ void mainfenetre::miseEnPlace(){
 void mainfenetre::page1Init(){
 
     ipadd->setInputMask("000.000.000.000;_");
-    ipadd->setMaximumWidth(100);
+    ipadd->setMaximumWidth(150);
     receiveSocket->bind(8000);
     timerIsAlive->start(1000);
-    box->addWidget(ipadd);
-    box->addWidget(seConnecter);
+    slider->setRange(0.5,5);
+    slider->setSingleStep(1);
+
+    box->addWidget(ipadd,2,3,1,1);
+    box->addWidget(seConnecter,2,4,1,1);
+    box->addWidget(slider,3,2,1,5);
+    box->addWidget(tick1,3,3,1,1);
+    box->addWidget(tick2,3,4,1,1);
+    box->addWidget(tick3,3,5,1,1);
+    box->addWidget(tick4,3,6,1,1);
+    box->addWidget(tick5,3,7,1,1);
+    box->addWidget(second,3,1);
+
     page1->setLayout(box);
 }
 
@@ -332,4 +351,8 @@ void mainfenetre::isAlive(){
     QDataStream out(&datagram, QIODevice::WriteOnly);
     out<< "alive";
     sendSocket->writeDatagram(datagram, *add, 8003);
+}
+
+void mainfenetre::sliderChange(int *value){
+    qDebug()<<value;
 }
