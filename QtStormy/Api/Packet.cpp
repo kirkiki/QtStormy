@@ -1,12 +1,11 @@
 //
 // Created by bluedragonfly on 5/3/16.
 //
-#ifndef WIN32
 #include "Packet.hpp"
 #include <cstring>
 #ifdef WIN32
 #include <winsock2.h>
-#else
+#elif __linux__
 #include <netinet/in.h>
 #endif
 #include <iostream>
@@ -184,4 +183,3 @@ Packet &Packet::operator>>(double &data) {
 
     return *this;
 }
-#endif

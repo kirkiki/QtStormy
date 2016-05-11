@@ -11,17 +11,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += core gui widgets network
 TARGET = QtStormy
 TEMPLATE = app
 
+LIBS += -lws2_32
 
 SOURCES += main.cpp\
     Api/File.cpp \
     Api/Packet.cpp \
-    Api/UDPSocket.cpp \
     ConnectionPage.cpp \
     MainFenetre.cpp
 
 HEADERS  += \
     Api/File.hpp \
     Api/Packet.hpp \
-    Api/UDPSocket.hpp \
     ConnectionPage.hpp \
     MainFenetre.hpp

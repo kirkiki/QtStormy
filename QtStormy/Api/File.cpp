@@ -30,7 +30,7 @@ void File::getContent(){
 }
 
 void File::debugContent(){
-    for (int i = 0;i < content.size();i++){
+    for (unsigned int i = 0;i < content.size();i++){
         std::cout << content[i];
     }
 }
