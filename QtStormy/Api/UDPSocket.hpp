@@ -5,33 +5,48 @@
 #ifndef IOTOBSERVER_UDPSOCKET_HPP
 #define IOTOBSERVER_UDPSOCKET_HPP
 
-#ifdef WIN32
-#include <winsock2.h>
-#else
-#include <sys/socket.h>
-#endif
+
 #include <string>
 #include <cstdlib>
-#ifdef WIN32
-#include <winsock2.h>
-#else
-#include <netinet/in.h>
-#endif
 #include <cstdio>
+
 #include "Packet.hpp"
 
-typedef int SOCKET;
+#ifdef WIN32 /* si vous êtes sous Windows */
+
+#include <winsock2.h>
+
+#elif __linux__ /* si vous êtes sous Linux */
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <netdb.h>
+
 const int INVALID_SOCKET =  -1;
-const int SOCKET_ERROR =  -1;
-struct sockaddr_in;
-struct sockaddr;
-struct in_addr;
+const int SOCKET_ERROR  = -1;
+typedef int SOCKET;
+typedef struct sockaddr_in SOCKADDR_IN;
+typedef struct sockaddr SOCKADDR;
+typedef struct in_addr IN_ADDR;
+
+#else /* sinon vous êtes sur une plateforme non supportée */
+
+#error not defined for this platform
+
+#endif
 
 class UDPSocket{
 public:
+
+    //static bool isInit = false;
+    static void init();
+    static void end();
+
     UDPSocket();
     ~UDPSocket();
-
 
     void unbind();
 
@@ -51,7 +66,7 @@ public:
 private:
 
     SOCKET sock;
-    sockaddr_in pipe;
+    SOCKADDR_IN pipe;
 
     std::vector<char> buffer;
     int pipeSize;

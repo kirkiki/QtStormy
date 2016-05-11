@@ -1,16 +1,14 @@
 //
 // Created by bluedragonfly on 5/2/16.
 //
-#ifndef WIN32
+
 #include <cstring>
-#ifdef WIN32
-#include <winsock2.h>
-#else
 #include <libnet.h>
-#endif
 #include <iostream>
 #include <bitset>
 #include "UDPSocket.hpp"
+
+//bool UDPSocket::isInit = false;
 
 UDPSocket::UDPSocket() : buffer(65530) {
     pipe = {0};
@@ -37,7 +35,7 @@ bool UDPSocket::bindPort(unsigned int port) {
     pipe.sin_addr.s_addr = htonl(INADDR_ANY);
     pipe.sin_family = AF_INET;
     pipe.sin_port = htons((uint16_t)port);
-    if(bind(sock,(sockaddr*)& pipe, sizeof pipe)){
+    if(bind(sock,(SOCKADDR*)& pipe, sizeof pipe)){
         perror("bind");
         return false;
     }
@@ -45,7 +43,7 @@ bool UDPSocket::bindPort(unsigned int port) {
 }
 
 size_t UDPSocket::receive(void * data, size_t size, int flags) {//Vector<char> buf
-    int n = recvfrom(sock, data, size,flags, (sockaddr*) &pipe, (socklen_t *)  &pipeSize);
+    int n = recvfrom(sock, data, size,flags, (SOCKADDR*) &pipe, (socklen_t *)  &pipeSize);
     if(n >=0){
         std::cout<<"ReceivedPacket from "<< remoteAddress()<<":"<<remotePort()<<std::endl;
         std::cout<<"Datagram Size : "<<size<<std::endl;
@@ -112,4 +110,47 @@ unsigned int UDPSocket::remotePort() {
 
     return port;
 }
+
+////WINDOWS INIT !
+
+void UDPSocket::init() {
+#ifdef WIN32
+    WSADATA wsa;
+    int err = WSAStartup(MAKEWORD(2, 2), &wsa);
+    if(err < 0)
+    {
+        puts("WSAStartup failed !");
+        exit(EXIT_FAILURE);
+    }
 #endif
+}
+
+void UDPSocket::end() {
+#ifdef WIN32
+    WSACleanup();
+#endif
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
