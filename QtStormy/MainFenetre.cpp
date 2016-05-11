@@ -1,5 +1,4 @@
-#include "mainfenetre.h"
-
+#include "MainFenetre.hpp"
 #include <typeinfo>
 using namespace QtCharts;
 mainfenetre::mainfenetre()
@@ -71,7 +70,7 @@ void mainfenetre::page1Init(){
     ipadd->setInputMask("000.000.000.000;_");
     ipadd->setMaximumWidth(100);
     receiveSocket->bind(8000);
-    timerIsAlive->start(5000);
+    timerIsAlive->start(1000);
     box->addWidget(ipadd);
     box->addWidget(seConnecter);
     page1->setLayout(box);
@@ -268,10 +267,6 @@ void mainfenetre::receive(){
     char *ch;
    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam>>temp>>ch;
    qDebug()<<ch;
-
-
-
-
     //temp=40;
     for(int i=9;i>0;i--){
         values[i]=values[i-1];
@@ -332,7 +327,7 @@ void mainfenetre::colorCore(QProgressBar *bar,uint32_t prct){
 }
 
 void mainfenetre::isAlive(){
-    add=new QHostAddress("10.75.0.208");
+    add=new QHostAddress("10.75.18.77");
     QByteArray datagram;
     QDataStream out(&datagram, QIODevice::WriteOnly);
     out<< "alive";

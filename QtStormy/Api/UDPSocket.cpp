@@ -1,9 +1,13 @@
 //
 // Created by bluedragonfly on 5/2/16.
 //
-
+#ifndef WIN32
 #include <cstring>
+#ifdef WIN32
+#include <winsock2.h>
+#else
 #include <libnet.h>
+#endif
 #include <iostream>
 #include <bitset>
 #include "UDPSocket.hpp"
@@ -108,23 +112,4 @@ unsigned int UDPSocket::remotePort() {
 
     return port;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

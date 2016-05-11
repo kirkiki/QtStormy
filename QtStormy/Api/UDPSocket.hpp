@@ -5,11 +5,18 @@
 #ifndef IOTOBSERVER_UDPSOCKET_HPP
 #define IOTOBSERVER_UDPSOCKET_HPP
 
-
+#ifdef WIN32
+#include <winsock2.h>
+#else
 #include <sys/socket.h>
+#endif
 #include <string>
 #include <cstdlib>
+#ifdef WIN32
+#include <winsock2.h>
+#else
 #include <netinet/in.h>
+#endif
 #include <cstdio>
 #include "Packet.hpp"
 
