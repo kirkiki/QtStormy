@@ -3,12 +3,12 @@
 #include <QLineEdit>
 #include <QProgressBar>
 
-#include "mainfenetre.h"
+#include "MainFenetre.hpp"
 int main(int argc, char **argv)
 {
- QApplication app (argc, argv);
+    QApplication app (argc, argv);
 
- mainfenetre fenetre;
+    mainfenetre fenetre;
 
-     return app.exec();
+    return app.exec();
 }
