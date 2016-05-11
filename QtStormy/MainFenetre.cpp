@@ -17,7 +17,7 @@ mainfenetre::mainfenetre()
     connect(receiveSocket, SIGNAL(readyRead()), this, SLOT(receive()));
     connect(timer, SIGNAL(timeout()),this,SLOT(onTimeOut()));
     connect(timerIsAlive,SIGNAL(timeout()),this, SLOT(isAlive()));
-    connect(slider,SIGNAL(valueChanged(int)),this,SLOT(sliderChange(int)));
+    connect(slider,SIGNAL(valueChanged(int)),this,SLOT(sliderChange()));
     //temperature->setStyleSheet("selection-background-color: black;");
 
     fenetre->show();
@@ -369,16 +369,21 @@ void mainfenetre::colorCore(QProgressBar *bar,uint32_t prct){
 
 void mainfenetre::isAlive(){
     add=new QHostAddress(QHostAddress::LocalHost);
-    QByteArray datagram;
     Packet packet;
     std::string cmd = "alive";
     std::string id = "Tonton JMFN";
     packet << cmd << id;
 
     char * data = (char*)packet.getData();
-    receiveSocket->writeDatagram(data, 17 ,*add, 8003);
+    receiveSocket->writeDatagram(data,packet.getDataSize(),*add, 8003);
 }
 
-void mainfenetre::sliderChange(int *value){
-    qDebug()<<value;
+void mainfenetre::sliderChange(){
+    Packet packet;
+    std::string cmd="mesureFrequence";
+    std::string id="Tonton JMFN";
+    uint32_t value=slider->value();
+
+    packet<<cmd<<id<<value;
+    receiveSocket->writeDatagram((char*)packet.getData(),packet.getDataSize(),*add,8003);
 }

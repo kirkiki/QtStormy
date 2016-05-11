@@ -40,7 +40,7 @@ public slots:
     void onConnexion();
     void receive();
     void isAlive();
-    void sliderChange(int *value);
+    void sliderChange();
 
 
 private:
