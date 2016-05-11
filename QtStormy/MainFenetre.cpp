@@ -16,6 +16,7 @@ mainfenetre::mainfenetre()
     //temperature->setStyleSheet("selection-background-color: black;");
 
     fenetre->show();
+
 }
 void mainfenetre::miseEnPlace(){
     fenetre = new QWidget();

@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += core gui widgets network
 TARGET = QtStormy
 TEMPLATE = app
 
-LIBS += -lws2_32
+win32:LIBS+= -lws2_32
 
 SOURCES += main.cpp\
     Api/File.cpp \
