@@ -12,6 +12,7 @@ mainfenetre::mainfenetre()
     connect(seConnecter,SIGNAL(clicked()),this, SLOT(onConnexion()));
     connect(receiveSocket, SIGNAL(readyRead()), this, SLOT(receive()));
     connect(timer, SIGNAL(timeout()),this,SLOT(onTimeOut()));
+    connect(timerIsAlive,SIGNAL(timeout()),this, SLOT(isAlive()));
     //temperature->setStyleSheet("selection-background-color: black;");
 
     fenetre->show();
@@ -33,7 +34,7 @@ void mainfenetre::miseEnPlace(){
     receiveSocket = new QUdpSocket(this);
     datagram=new QByteArray;
     nbrRam=8; //a changer pour avoir le nbr de ram max
-
+    timerIsAlive=new QTimer(this);
 
     grille=new QGridLayout();
     core1 = new QProgressBar();
@@ -48,6 +49,7 @@ void mainfenetre::miseEnPlace(){
     series4 = new QLineSeries;
     view = new QChartView(chart);
     timer=new QTimer(this);
+
     axisX= new QCategoryAxis;
     axisY = new QCategoryAxis;
     temperature = new QProgressBar;
@@ -68,11 +70,8 @@ void mainfenetre::page1Init(){
 
     ipadd->setInputMask("000.000.000.000;_");
     ipadd->setMaximumWidth(100);
-
     receiveSocket->bind(8000);
-
-
-
+    timerIsAlive->start(5000);
     box->addWidget(ipadd);
     box->addWidget(seConnecter);
     page1->setLayout(box);
@@ -254,11 +253,7 @@ void mainfenetre::onTimeOut(){
 
 void mainfenetre::onConnexion(){
     //add=new QHostAddress(ipadd->text()); //a rajouter pour le projet
-    add=new QHostAddress(QHostAddress::LocalHost); // a enlever, pour le test
-    QByteArray datagram;
-    QDataStream out(&datagram, QIODevice::WriteOnly);
-    out<< "hello alexis";
-    sendSocket->writeDatagram(datagram, *add, 8000);
+    //add=new QHostAddress(QHostAddress::LocalHost); // a enlever, pour le test
 }
 
 void mainfenetre::receive(){
@@ -270,8 +265,14 @@ void mainfenetre::receive(){
 
     QDataStream in(&datagram, QIODevice::ReadOnly);
    // int firstValue;
-    in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam>>temp;
-    //temp=100;
+    char *ch;
+   in >> prctCoeur1>>prctCoeur2>>prctCoeur3>>prctCoeur4>>prctRam>>temp>>ch;
+   qDebug()<<ch;
+
+
+
+
+    //temp=40;
     for(int i=9;i>0;i--){
         values[i]=values[i-1];
         values2[i]=values2[i-1];
@@ -296,13 +297,13 @@ void mainfenetre::receive(){
 
 QString mainfenetre::color(){
     QString low = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: %0 white, stop: 0 white);").arg(1-(temp/100.0)) ;
-    QString middle = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.55 orange, stop: %0 white, stop: 0 white);").arg(1-(temp/100.0));
+    QString middle = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.66 orange, stop: %0 white, stop: 0 white);").arg(1-(temp/100.0));
     QString high = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.55 orange, stop: 0.25 red, stop: %0 white, stop:0 white);").arg(1-(temp/100.0));
     QString full = QString("background: qlineargradient(x1: 1, y1: 0, x2: 1, y2: 1, stop: 1 blue, stop: 0.55 orange, stop: 0.25 red stop:0 red);");
     if(temp<33){
         return low;
     }
-    else if(temp<66){
+    else if(temp<75){
         return middle;
     }
     else if(temp==100) {
@@ -328,4 +329,12 @@ void mainfenetre::colorCore(QProgressBar *bar,uint32_t prct){
                                 "margin: 0.5px;"
                                 "}" ;
                 bar->setStyleSheet(style_sheet) ;
+}
+
+void mainfenetre::isAlive(){
+    add=new QHostAddress("10.75.0.208");
+    QByteArray datagram;
+    QDataStream out(&datagram, QIODevice::WriteOnly);
+    out<< "alive";
+    sendSocket->writeDatagram(datagram, *add, 8003);
 }

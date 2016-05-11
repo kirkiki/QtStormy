@@ -38,6 +38,7 @@ public slots:
     void onTimeOut();
     void onConnexion();
     void receive();
+    void isAlive();
 
 private:
     QWidget *fenetre;
@@ -79,6 +80,7 @@ private:
     QHostAddress *add;
     QByteArray *datagram;
     std::string *s;
+    QTimer *timerIsAlive;
 
     std::uint32_t prctCoeur1;
     std::uint32_t prctCoeur2;
@@ -92,6 +94,7 @@ private:
     int nbrRam;
     int prctRam;
     int valuesRam [10];
+    std::string coeur;
 
 
 };
