@@ -36,7 +36,7 @@ void mainfenetre::miseEnPlace(){
     box=new QGridLayout;
     ipadd = new QLineEdit();
     seConnecter= new QPushButton("se connecter", this);
-    sendSocket=new QUdpSocket(this);
+    //sendSocket=new QUdpSocket(this);
     receiveSocket = new QUdpSocket(this);
     datagram=new QByteArray;
     nbrRam=8; //a changer pour avoir le nbr de ram max
@@ -58,8 +58,8 @@ void mainfenetre::miseEnPlace(){
     series = new QLineSeries;
     series2=new QLineSeries;
     series3 = new QLineSeries;
-    chart = new QChart;
     series4 = new QLineSeries;
+    chart = new QChart;
     view = new QChartView(chart);
     timer=new QTimer(this);
 
@@ -116,50 +116,50 @@ void mainfenetre::page2Init(){
     timer->start(100);
 
     //core1
-    series->append(0,0);
-    series->append(10,50);
-    series->append(20,50);
-    series->append(30,50);
-    series->append(40,50);
-    series->append(50,50);
-    series->append(60,50);
-    series->append(70,50);
-    series->append(80,50);
-    series->append(90,100);
+    series->append(0,4);
+    series->append(1,4);
+    series->append(2,4);
+    series->append(3,4);
+    series->append(4,4);
+    series->append(5,4);
+    series->append(6,4);
+    series->append(7,4);
+    series->append(8,4);
+    series->append(9,4);
 
     //core2
     series2->append(0,0);
-    series2->append(10,50);
-    series2->append(20,50);
-    series2->append(30,50);
-    series2->append(40,50);
-    series2->append(50,50);
-    series2->append(60,50);
-    series2->append(70,50);
-    series2->append(80,50);
-    series2->append(90,100);
+    series2->append(1,2);
+    series2->append(2,2);
+    series2->append(3,2);
+    series2->append(4,2);
+    series2->append(5,2);
+    series2->append(6,2);
+    series2->append(7,2);
+    series2->append(8,2);
+    series2->append(9,98);
     //core3
-    series3->append(0,0);
-    series3->append(10,50);
-    series3->append(20,50);
-    series3->append(30,50);
-    series3->append(40,50);
-    series3->append(50,50);
-    series3->append(60,50);
-    series3->append(70,50);
-    series3->append(80,50);
-    series3->append(90,100);
+    series3->append(0,3);
+    series3->append(1,3);
+    series3->append(2,3);
+    series3->append(3,3);
+    series3->append(4,3);
+    series3->append(5,3);
+    series3->append(6,3);
+    series3->append(7,3);
+    series3->append(8,3);
+    series3->append(9,97);
     //Core4
     series4->append(0,0);
-    series4->append(10,50);
-    series4->append(20,50);
-    series4->append(30,50);
-    series4->append(40,50);
-    series4->append(50,50);
-    series4->append(60,50);
-    series4->append(70,50);
-    series4->append(80,50);
-    series4->append(90,100);
+    series4->append(1,1);
+    series4->append(2,1);
+    series4->append(3,1);
+    series4->append(4,1);
+    series4->append(5,1);
+    series4->append(6,1);
+    series4->append(7,1);
+    series4->append(8,1);
+    series4->append(9,100);
 
     chart->legend()->hide();
     chart->addSeries(series);
@@ -175,18 +175,11 @@ void mainfenetre::page2Init(){
     series->attachAxis(axisX);
     series->attachAxis(axisY);
 
-
-
-
-
-
     view->setRenderHint(QPainter::Antialiasing);
     core1->setTextVisible(true);
     core2->setTextVisible(true);
     core3->setTextVisible(true);
     core4->setTextVisible(true);
-
-
 
     core1->setAlignment(Qt::AlignCenter);
     core2->setAlignment(Qt::AlignCenter);
@@ -203,6 +196,7 @@ void mainfenetre::page2Init(){
 }
 
 void mainfenetre::page3Init(){
+
     chartRam->addSeries(ram);
     chartRam->addAxis(ramGo,Qt::AlignLeft);
     chartRam->addAxis(time,Qt::AlignBottom);
@@ -215,20 +209,19 @@ void mainfenetre::page3Init(){
     chartRam->setTitle("RAM pourcentage");
     ramGo->setGridLineVisible(true);
 
-    ram->append(0,0);
-    ram->append(10,1);
-    ram->append(20,1);
-    ram->append(30,1);
-    ram->append(40,1);
-    ram->append(50,1);
-    ram->append(60,1);
-    ram->append(70,1);
-    ram->append(80,1);
-    ram->append(90,1);
-    ramGo->setRange(0,nbrRam);
+    ram->append(0,1);
+    ram->append(1,1);
+    ram->append(2,1);
+    ram->append(3,1);
+    ram->append(4,1);
+    ram->append(5,1);
+    ram->append(6,1);
+    ram->append(7,1);
+    ram->append(8,1);
+    ram->append(9,1);
+
+    //ramGo->setRange(0,nbrRam+1);
     time->setRange(0,100);
-
-
 
     view->setRenderHint(QPainter::Antialiasing);
     grid->addWidget(viewRam,0,0);
@@ -303,10 +296,10 @@ void mainfenetre::receive(){
    char * ch;
    char * ch2;
 
-   in >> ch;
+   in >>ch;
    in >> ch2;
-
-   Cpu lol(ch);
+   temp=atoi(ch);
+   Cpu cpu (ch);
 
     //temp=40;
     for(int i=9;i>0;i--){
@@ -315,20 +308,16 @@ void mainfenetre::receive(){
         values3[i]=values3[i-1];
         values4[i]=values4[i-1];
         valuesRam[i]=valuesRam[i-1];
-
     }
     values[0]=prctCoeur1;
+    //values[0]= cpu.getInfo(0);
     values2[0]=prctCoeur2;
+    //values2[0]= cpu.getInfo(1);
     values3[0]=prctCoeur3;
+    //values3[0]= cpu.getInfo(2);
     values4[0]=prctCoeur4;
+    //values'[0]= cpu.getInfo(3);
     valuesRam[0]=prctRam;
-
-
-    /*qDebug(LocalHost)<<prctCoeur1;
-    qDebug()<<prctCoeur2;
-    qDebug()<<prctCoeur3;
-    qDebug()<<prctCoeur4;*/
-
 }
 
 QString mainfenetre::color(){

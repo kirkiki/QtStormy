@@ -94,11 +94,11 @@ private:
     std::string *s;
     QTimer *timerIsAlive;
 
-    std::uint32_t prctCoeur1;
-    std::uint32_t prctCoeur2;
-    std::uint32_t prctCoeur3;
-    std::uint32_t prctCoeur4;
-    std::uint32_t temp;
+    std::uint32_t prctCoeur1=0;
+    std::uint32_t prctCoeur2=0;
+    std::uint32_t prctCoeur3=0;
+    std::uint32_t prctCoeur4=0;
+    std::uint32_t temp=0;
     int values [10];
     int values2 [10];
     int values3 [10];
