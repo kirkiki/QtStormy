@@ -303,6 +303,8 @@ void mainfenetre::receive(){
    cpu.parseData(ch);
    cpu.calculPercentage();
 
+   ram2.parseData(ch2);
+
 
     //temp=40;
     for(int i=9;i>0;i--){
