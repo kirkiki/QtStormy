@@ -1,42 +1,12 @@
 #include "Cpu.hpp"
 
-Cpu::Cpu()
+Cpu::Cpu() :
+    nbCore(0),
+    temperature(0)
 {
 
 }
 
-void Cpu::calculPercentage(){
-    data[0].erase(data[0].begin());
-
-    if (lastData.empty()){
-        std::cout << "[!] No previous Data !" << std::endl;
-        lastData = data;
-        data.clear();
-    }
-
-    else {
-        int i = 0;
-        for (i;i < data.size() -1;i++){
-           long d1 = data[i][0] - lastData[i][0];
-           long d2 = data[i][1] - lastData[i][1];
-           long d3 = data[i][2] - lastData[i][2];
-           long d4 = data[i][3] - lastData[i][3];
-
-           /*std::cout << d1 << "  "<<data[i][0] << "  "<< lastData[i][0] << std::endl;
-           std::cout << d2 << "  "<<data[i][1] << "  "<< lastData[i][1]<< std::endl;
-           std::cout << d3 << "  "<<data[i][2] <<"  " << lastData[i][2]<< std::endl;
-           std::cout << d4 <<"  "<<data[i][3] << "  " << lastData[i][3]<< std::endl;
-           */
-
-           double res = (double)((d1+d2+d3) * 100L) / (double)(d1+d2+d3+d4);
-           actualprc.push_back(res); // A modifier !
-           std::cout << "CPU[" << i << "]="<< res << std::endl;
-       }
-        t = data[i][data.size()-1];
-        lastData = data;
-        data.clear();
-    }
-}
 
 void Cpu::parseData(std::string rawdata){
     const std::string lf = "\n";
@@ -61,7 +31,7 @@ void Cpu::parseData(std::string rawdata){
             j++;
         }
 
-        if (l1 = std::string::npos){
+        if (l1 == std::string::npos){
             treatedinfo.push_back(atoi((tabinfo[i].substr(0,l1)).c_str()));
         }
 
@@ -70,6 +40,54 @@ void Cpu::parseData(std::string rawdata){
 
         treatedinfo.clear();
         i++;
-    }    
+    }
     tabinfo.clear();
+    calculPercentage();
+}
+
+
+void Cpu::calculPercentage(){
+    data[0].erase(data[0].begin());
+
+    if (lastData.empty()){
+        std::cout << "[!] No previous Data !" << std::endl;
+        lastData = data;
+        data.clear();
+    }
+
+    else {
+        unsigned int i = 0;
+        for (;i < data.size() -1;i++){
+           long d1 = data[i][0] - lastData[i][0];
+           long d2 = data[i][1] - lastData[i][1];
+           long d3 = data[i][2] - lastData[i][2];
+           long d4 = data[i][3] - lastData[i][3];
+std::vector <double> actualprc;
+           /*std::cout << d1 << "  "<<data[i][0] << "  "<< lastData[i][0] << std::endl;
+           std::cout << d2 << "  "<<data[i][1] << "  "<< lastData[i][1]<< std::endl;
+           std::cout << d3 << "  "<<data[i][2] <<"  " << lastData[i][2]<< std::endl;
+           std::cout << d4 <<"  "<<data[i][3] << "  " << lastData[i][3]<< std::endl;
+           */
+
+           double res = (double)((d1+d2+d3) * 100L) / (double)(d1+d2+d3+d4);
+           actualprc.push_back(res); // A modifier !
+           std::cout << "CPU[" << i << "]="<< res << std::endl;
+       }
+        nbCore = data.size()-2;
+        temperature = data[i][data.size()-1];
+        lastData = data;
+        data.clear();
+    }
+}
+
+int Cpu::getTemperature(){
+    return temperature;
+}
+
+int Cpu::getNbCore(){
+    return nbCore;
+}
+
+double Cpu::getPrct(int index){
+    return actualprc.size() >index ? actualprc[index]: 0.0;
 }

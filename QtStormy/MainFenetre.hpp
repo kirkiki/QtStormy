@@ -21,16 +21,21 @@
 #include <QPalette>
 #include <QSlider>
 
-#include "Cpu.hpp"
-#include "Ram.hpp"
+#include "ConnectionWidget.hpp"
+#include "DataWidget.hpp"
+
+
 
 using namespace QtCharts;
-class mainfenetre: public QMainWindow
+class mainfenetre: public QObject
 {
     Q_OBJECT
 
     public:
+
+public:
     mainfenetre();
+    DataWidget* Data();
     void miseEnPlace();
     void page1Init();
     void page2Init();
@@ -40,32 +45,29 @@ class mainfenetre: public QMainWindow
 
 public slots:
     void onTimeOut();
-    void onConnexion();
-    void receive();
-    void isAlive();
     void sliderChange();
 
-
 private:
-    Cpu cpu;
-    Ram ram2;
+    QWidget* fenetre;
 
-    QWidget *fenetre;
+    ConnectionWidget *connecWidget;
 
-    QTabWidget *onglets;
-    QWidget *page1;
-    QWidget *page2;
-    QWidget *page3;
+    DataWidget* dataWidget;
 
-    QGridLayout *grille;
+    QVBoxLayout* containerLayout;
+
+    /*
+
+    QTabWidget *tabs;
+    QWidget *cpuPage;
+    QWidget *ramPage;
+
     QProgressBar *core1;
     QProgressBar *core2;
     QProgressBar *core3;
     QProgressBar *core4;
 
     QGridLayout *box;
-    QLineEdit *ipadd;
-    QPushButton *seConnecter;
     QChart *chart;
     QLineSeries *series;
     QLineSeries *series2;
@@ -75,6 +77,9 @@ private:
     QTimer *timer;
     QCategoryAxis *axisX;
     QCategoryAxis *axisY;
+
+
+    QVBoxLayout * containerLayout;
     QGridLayout *grid;
 
     QSlider *slider;
@@ -85,7 +90,6 @@ private:
     QLabel *tick5;
     QLabel *second;
 
-
     QLineSeries *ram;
     QChart *chartRam;
     QChartView *viewRam;
@@ -93,12 +97,9 @@ private:
     QCategoryAxis *time;
     QProgressBar *temperature;
 
-    QUdpSocket *sendSocket;
-    QUdpSocket *receiveSocket;
-    QHostAddress *add;
+
     QByteArray *datagram;
     std::string *s;
-    QTimer *timerIsAlive;
 
     std::uint32_t prctCoeur1=0;
     std::uint32_t prctCoeur2=0;
@@ -114,7 +115,7 @@ private:
     int valuesRam [10];
     std::string coeur;
 
-
+*/
 };
 
     #endif // MAINFENETRE_H

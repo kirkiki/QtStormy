@@ -16,15 +16,19 @@ win32:LIBS+= -lws2_32
 SOURCES += main.cpp\
     Api/File.cpp \
     Api/Packet.cpp \
-    ConnectionPage.cpp \
     MainFenetre.cpp \
-    Cpu.cpp \
-    Ram.cpp
+    Ram.cpp \
+    ConnectionWidget.cpp \
+    DataWidget.cpp \
+    CpuWidget.cpp \
+    Cpu.cpp
 
 HEADERS  += \
     Api/File.hpp \
     Api/Packet.hpp \
-    ConnectionPage.hpp \
     MainFenetre.hpp \
-    Cpu.hpp \
-    Ram.hpp
+    Ram.hpp \
+    ConnectionWidget.hpp \
+    DataWidget.hpp \
+    CpuWidget.hpp \
+    Cpu.hpp
