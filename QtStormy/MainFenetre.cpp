@@ -296,10 +296,12 @@ void mainfenetre::receive(){
    char * ch;
    char * ch2;
 
-   in >>ch;
+   in >> ch;
+   std::cout << ch << std::endl;
    in >> ch2;
-   temp=atoi(ch);
-   Cpu cpu (ch);
+
+   cpu.parseData(ch);
+   cpu.calculPercentage();
 
     //temp=40;
     for(int i=9;i>0;i--){

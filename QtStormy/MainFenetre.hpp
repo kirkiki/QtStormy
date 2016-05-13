@@ -21,6 +21,8 @@
 #include <QPalette>
 #include <QSlider>
 
+#include "Cpu.hpp"
+
 using namespace QtCharts;
 class mainfenetre: public QMainWindow
 {
@@ -44,6 +46,8 @@ public slots:
 
 
 private:
+    Cpu cpu;
+
     QWidget *fenetre;
 
     QTabWidget *onglets;

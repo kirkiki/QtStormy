@@ -8,11 +8,18 @@
 class Cpu
 {
 public:
-    Cpu(char * rawdata);
+    Cpu();
+
+    int t;
+    int corenum;
     void parseData(std::string rawdata);
+    void calculPercentage();
+    double getPercentage();
+
 private:
-    std::vector <int> core;
-    std::vector <std::string> rawcore;
+    int nbCore;
+    std::vector <std::vector <long>> data;
+    std::vector <std::vector <long>> lastData;
 };
 
 #endif // CPU_H
