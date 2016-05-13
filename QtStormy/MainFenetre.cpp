@@ -3,6 +3,7 @@
 #include <typeinfo>
 #include "Api/Packet.hpp"
 #include "Cpu.hpp"
+#include "Ram.hpp"
 
 using namespace QtCharts;
 
@@ -297,11 +298,11 @@ void mainfenetre::receive(){
    char * ch2;
 
    in >> ch;
-   std::cout << ch << std::endl;
    in >> ch2;
 
    cpu.parseData(ch);
    cpu.calculPercentage();
+
 
     //temp=40;
     for(int i=9;i>0;i--){

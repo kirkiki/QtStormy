@@ -15,23 +15,27 @@ void Cpu::calculPercentage(){
     }
 
     else {
-        for (int i = 0;i < corenum;i++){
+        int i = 0;
+        for (i;i < data.size() -1;i++){
            long d1 = data[i][0] - lastData[i][0];
            long d2 = data[i][1] - lastData[i][1];
            long d3 = data[i][2] - lastData[i][2];
            long d4 = data[i][3] - lastData[i][3];
-           double res = (double)((d1+d2+d3) * 100L) / (double)(d1+d2+d3+d4);
 
+           /*std::cout << d1 << "  "<<data[i][0] << "  "<< lastData[i][0] << std::endl;
+           std::cout << d2 << "  "<<data[i][1] << "  "<< lastData[i][1]<< std::endl;
+           std::cout << d3 << "  "<<data[i][2] <<"  " << lastData[i][2]<< std::endl;
+           std::cout << d4 <<"  "<<data[i][3] << "  " << lastData[i][3]<< std::endl;
+           */
+
+           double res = (double)((d1+d2+d3) * 100L) / (double)(d1+d2+d3+d4);
+           actualprc.push_back(res); // A modifier !
            std::cout << "CPU[" << i << "]="<< res << std::endl;
        }
+        t = data[i][data.size()-1];
         lastData = data;
         data.clear();
     }
-}
-
-double Cpu::getPercentage(){
-
-
 }
 
 void Cpu::parseData(std::string rawdata){

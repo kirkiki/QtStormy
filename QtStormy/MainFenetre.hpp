@@ -22,6 +22,7 @@
 #include <QSlider>
 
 #include "Cpu.hpp"
+#include "Ram.hpp"
 
 using namespace QtCharts;
 class mainfenetre: public QMainWindow
@@ -47,6 +48,7 @@ public slots:
 
 private:
     Cpu cpu;
+    Ram ram2;
 
     QWidget *fenetre;
 
